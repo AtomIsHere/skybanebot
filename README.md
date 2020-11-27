@@ -8,6 +8,7 @@ This plugin uses gradle to build and is Licensed under GNU GPL v3.0. If you need
 ## Dependencies
 * DiscordSRV
 * A modified version of the Hypixel Public API in your maven local which can be found here: https://github.com/AtomIsHere/PublicAPI
+* A plugin for your preferred IDE to add support for the lombok project
 
 ## Building
 Building this project is very simple. Make sure you have gradle installed, cd into the directory you clone this into and type `gradle jar`. You can also do this via your preferred IDE's GUI.
