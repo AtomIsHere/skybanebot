@@ -24,11 +24,11 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CacheManager extends AbstractService {
-    private final Map<Class<?>, ICache<?>> caches = new HashMap<>();
+    private final Set<ICache<?>> caches = new HashSet<>();
 
     private BukkitTask cacheUpdateTask;
 
@@ -38,13 +38,13 @@ public class CacheManager extends AbstractService {
 
     @Override
     public void onStart() {
-        cacheUpdateTask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> caches.values().forEach(ICache::updateCache), 20L, 72000L);
+        cacheUpdateTask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> caches.forEach(ICache::updateCache), 20L, 72000L);
     }
 
     @Override
     public void onStop() {
         cacheUpdateTask.cancel();
-        caches.values().forEach(c -> {
+        caches.forEach(c -> {
             try {
                 plugin.getConfigHandler().saveConfigValues(c, c.getName());
             } catch (IOException | InvalidConfigurationException e) {
@@ -56,8 +56,8 @@ public class CacheManager extends AbstractService {
         caches.clear();
     }
 
-    public <T> /* ensure same type by using generics */ void registerCache(Class<T> cacheClass, ICache<T> cache) {
-        if(caches.containsKey(cacheClass)) {
+    public void registerCache(ICache<?> cache) {
+        if(caches.stream().anyMatch(c -> c.getName().equals(cache.getName()))) {
             return;
         }
 
@@ -67,11 +67,21 @@ public class CacheManager extends AbstractService {
             e.printStackTrace();
         }
 
-        caches.put(cacheClass, cache);
+        caches.add(cache);
     }
 
     @SuppressWarnings("unchecked")
-    public <T, C extends ICache<T>> C getCache(Class<T> typeClass) {
-        return (C) caches.get(typeClass);
+    public <T, C extends ICache<T>> C getCacheFromClass(Class<C> cacheClass) {
+        return (C) caches.stream()
+                .filter(c -> cacheClass.isInstance(cacheClass))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public ICache<?> getCacheFromName(String name) {
+        return caches.stream()
+                .filter(c -> c.getName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 }
