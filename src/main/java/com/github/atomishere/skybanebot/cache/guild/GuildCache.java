@@ -15,9 +15,10 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.github.atomishere.skybanebot.cache;
+package com.github.atomishere.skybanebot.cache.guild;
 
 import com.github.atomishere.skybanebot.SkybaneBot;
+import com.github.atomishere.skybanebot.cache.ICache;
 import com.github.atomishere.skybanebot.config.ConfigurationValue;
 import lombok.RequiredArgsConstructor;
 import net.hypixel.api.reply.GuildReply;

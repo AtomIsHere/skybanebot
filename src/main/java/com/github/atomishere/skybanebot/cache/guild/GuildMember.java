@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.github.atomishere.skybanebot.cache;
+package com.github.atomishere.skybanebot.cache.guild;
 
 import lombok.Data;
 
