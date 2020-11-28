@@ -21,8 +21,11 @@ import com.github.atomishere.skybanebot.SkybaneBot;
 import com.github.atomishere.skybanebot.exceptions.ServiceStateConflictException;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+
+import java.io.IOException;
 
 @RequiredArgsConstructor
 public abstract class AbstractService implements IService {
@@ -34,6 +37,12 @@ public abstract class AbstractService implements IService {
     public void start() {
         if(started) {
             throw new ServiceStateConflictException(getName(), ServiceStateConflictException.State.STARTED);
+        }
+
+        try {
+            plugin.getConfigHandler().injectConfigValues(this, this.getName());
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
         }
 
         if(this instanceof Listener) {
@@ -48,6 +57,13 @@ public abstract class AbstractService implements IService {
     public void stop() {
         if(!started) {
             throw new ServiceStateConflictException(getName(), ServiceStateConflictException.State.STOPPED);
+        }
+
+        try {
+            plugin.getConfigHandler().saveConfigValues(this, this.getName());
+        } catch (InvalidConfigurationException | IOException e) {
+            e.printStackTrace();
+            return;
         }
 
         if(this instanceof Listener) {
