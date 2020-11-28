@@ -1,0 +1,104 @@
+/*
+ * Copyright (C) 2020 Archie O'Connor
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.github.atomishere.skybanebot.service;
+
+import com.github.atomishere.skybanebot.SkybaneBot;
+import com.github.atomishere.skybanebot.exceptions.ServiceAlreadyRegisteredException;
+import com.github.atomishere.skybanebot.exceptions.ServiceNotFoundException;
+import lombok.RequiredArgsConstructor;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
+@RequiredArgsConstructor
+public class ServiceManager {
+    private final SkybaneBot plugin;
+    private final List<IService> services = new ArrayList<>();
+
+    private boolean started = false;
+
+    public void startServices() {
+        if(started) {
+            //TODO: Log this
+            return;
+        }
+
+        services.forEach(IService::start);
+        started = true;
+    }
+
+    public void stopServices() {
+        if(!started) {
+            //TODO: Log this
+            return;
+        }
+
+        services.forEach(IService::stop);
+        started = false;
+    }
+
+    public void clearServices() {
+        services.clear();
+    }
+
+    public void registerService(IService service) {
+        if(services.stream().anyMatch(s -> s.getName().equals(service.getName()))) {
+            throw new ServiceAlreadyRegisteredException(service.getName());
+        }
+
+        services.add(service);
+    }
+
+    public <S extends AbstractService> S registerService(Class<S> serviceClass) {
+        Constructor<S> con;
+        try {
+            con = serviceClass.getConstructor(SkybaneBot.class);
+        } catch (NoSuchMethodException nsme) {
+            nsme.printStackTrace();
+            return null;
+        }
+
+        S inst;
+        try {
+            inst = con.newInstance(plugin);
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        registerService(inst);
+        return inst;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <S extends IService> S getServiceFromClass(Class<S> serviceClass) {
+        return (S) services.stream()
+                .filter(s -> serviceClass.isInstance(serviceClass))
+                .findFirst()
+                .orElseThrow(() -> new ServiceNotFoundException(serviceClass));
+    }
+
+    public IService getServiceFromName(String name) {
+        return services.stream()
+                .filter(s -> s.getName().equals(name))
+                .findFirst()
+                .orElseThrow(() -> new ServiceNotFoundException(name));
+    }
+}
