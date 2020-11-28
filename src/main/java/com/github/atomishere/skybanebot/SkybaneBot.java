@@ -17,17 +17,31 @@
 
 package com.github.atomishere.skybanebot;
 
+import com.github.atomishere.skybanebot.config.ConfigHandler;
+import com.github.atomishere.skybanebot.service.ServiceManager;
+import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SkybaneBot extends JavaPlugin {
+    @Getter
+    private ConfigHandler configHandler;
+    private ServiceManager serviceManager;
 
     @Override
     public void onEnable() {
+        configHandler = new ConfigHandler(getDataFolder());
+        configHandler.init();
 
+        serviceManager = new ServiceManager(this);
+        //Register services
+        //
+        serviceManager.startServices();
     }
 
     @Override
     public void onDisable() {
-
+        serviceManager.stopServices();
+        configHandler.saveConfigs();
+        serviceManager.clearServices();
     }
 }
