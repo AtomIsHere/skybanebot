@@ -28,8 +28,11 @@ import org.bukkit.scheduler.BukkitTask;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class CacheManager extends AbstractService {
+    private static final Logger logger = Logger.getLogger(CacheManager.class.getName());
+
     private final Set<ICache<?>> caches = new HashSet<>();
 
     private BukkitTask cacheUpdateTask;
@@ -47,8 +50,10 @@ public class CacheManager extends AbstractService {
         registerCache(alliedGuildCache);
         alliedGuildCache.init();
 
-
-        cacheUpdateTask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> caches.forEach(ICache::updateCache), 20L, 72000L);
+        cacheUpdateTask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+            caches.forEach(ICache::updateCache);
+            logger.info("Cache updated!");
+        }, 20L, 72000L);
     }
 
     @Override
