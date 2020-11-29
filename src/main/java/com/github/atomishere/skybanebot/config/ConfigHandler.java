@@ -65,9 +65,16 @@ public class ConfigHandler {
     }
 
     public void injectConfigValues(Object object, String configName) throws IOException, InvalidConfigurationException {
+        Optional<Field> configFieldOpt = Arrays.stream(object.getClass().getDeclaredFields()).filter(f -> f.isAnnotationPresent(ConfigField.class)).findAny();
+        Collection<Field> fields = findAllFieldsWithAnnotation(object.getClass(), ConfigurationValue.class);
+
+        if(configFieldOpt.isEmpty() && fields.size() == 0) {
+            return;
+        }
+
         ConfigContainer config = getOrCreateConfig(configName);
 
-        for(Field configField : findAllFieldsWithAnnotation(object.getClass(), ConfigurationValue.class)) {
+        for(Field configField : fields) {
             configField.setAccessible(true);
 
             ConfigurationValue configValue = configField.getAnnotation(ConfigurationValue.class);
@@ -95,7 +102,6 @@ public class ConfigHandler {
             configField.setAccessible(false);
         }
 
-        Optional<Field> configFieldOpt = Arrays.stream(object.getClass().getDeclaredFields()).filter(f -> f.isAnnotationPresent(ConfigField.class)).findAny();
         if(configFieldOpt.isPresent()) {
             Field configField = configFieldOpt.get();
 
@@ -112,6 +118,11 @@ public class ConfigHandler {
     }
 
     public void saveConfigValues(Object toSave, String configName) throws IOException, InvalidConfigurationException {
+        Collection<Field> fields = findAllFieldsWithAnnotation(toSave.getClass(), ConfigurationValue.class);
+        if(fields.size() == 0) {
+            return;
+        }
+
         ConfigContainer config = getOrCreateConfig(configName);
 
         for(Field configField : findAllFieldsWithAnnotation(toSave.getClass(), ConfigurationValue.class)) {
