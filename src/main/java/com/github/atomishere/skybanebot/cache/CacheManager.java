@@ -18,6 +18,8 @@
 package com.github.atomishere.skybanebot.cache;
 
 import com.github.atomishere.skybanebot.SkybaneBot;
+import com.github.atomishere.skybanebot.cache.guild.AlliedGuildCache;
+import com.github.atomishere.skybanebot.cache.guild.GuildCache;
 import com.github.atomishere.skybanebot.service.AbstractService;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -38,6 +40,14 @@ public class CacheManager extends AbstractService {
 
     @Override
     public void onStart() {
+        registerCache(new GuildCache(plugin));
+
+        // Inject config fields then init
+        AlliedGuildCache alliedGuildCache = new AlliedGuildCache(plugin);
+        registerCache(alliedGuildCache);
+        alliedGuildCache.init();
+
+
         cacheUpdateTask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> caches.forEach(ICache::updateCache), 20L, 72000L);
     }
 
