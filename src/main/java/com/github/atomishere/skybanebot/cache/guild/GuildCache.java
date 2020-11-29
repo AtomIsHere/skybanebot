@@ -22,6 +22,7 @@ import com.github.atomishere.skybanebot.cache.ICache;
 import com.github.atomishere.skybanebot.config.ConfigurationValue;
 import lombok.RequiredArgsConstructor;
 import net.hypixel.api.reply.GuildReply;
+import org.shanerx.mojang.PlayerProfile;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,20 +49,23 @@ public class GuildCache implements ICache<GuildMember> {
         }
 
         clearCache();
-        guild.getGuild()
-                .getMembers()
-                .stream()
-                .map(this::createMember)
-                .forEach(this.members::add);
+        for(GuildReply.Guild.Member member : guild.getGuild().getMembers()) {
+            PlayerProfile profile = plugin.getMojangApiManager().getMojang().getPlayerProfile(member.getUuid().toString());
+            if (profile != null) {
+                members.add(createMember(member, profile.getUsername()));
+            } else {
+                members.add(createMember(member, null));
+            }
+        }
     }
 
-    private GuildMember createMember(GuildReply.Guild.Member member) {
+    private GuildMember createMember(GuildReply.Guild.Member member, String username) {
         int xp = 0;
         for(int day : member.getExpHistory().values()) {
             xp += day;
         }
 
-        return new GuildMember(member.getUuid(), xp);
+        return new GuildMember(member.getUuid(), username,  xp);
     }
 
     @Override

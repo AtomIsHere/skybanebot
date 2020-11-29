@@ -24,5 +24,6 @@ import java.util.UUID;
 @Data
 public class GuildMember {
     private final UUID memberUUID;
+    private final String username;
     private final int weeklyXp;
 }
