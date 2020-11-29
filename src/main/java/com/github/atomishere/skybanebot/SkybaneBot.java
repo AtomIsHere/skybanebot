@@ -19,6 +19,7 @@ package com.github.atomishere.skybanebot;
 
 import com.github.atomishere.skybanebot.api.HypixelApiManager;
 import com.github.atomishere.skybanebot.api.MojangApiManager;
+import com.github.atomishere.skybanebot.cache.CacheManager;
 import com.github.atomishere.skybanebot.config.ConfigHandler;
 import com.github.atomishere.skybanebot.service.ServiceManager;
 import lombok.Getter;
@@ -34,6 +35,10 @@ public class SkybaneBot extends JavaPlugin {
     @Getter
     private MojangApiManager mojangApiManager;
 
+
+    @Getter
+    private CacheManager cacheManager;
+
     @Override
     public void onEnable() {
         configHandler = new ConfigHandler(getDataFolder());
@@ -44,7 +49,7 @@ public class SkybaneBot extends JavaPlugin {
         hypixelApiManager = serviceManager.registerService(HypixelApiManager.class);
         mojangApiManager = serviceManager.registerService(MojangApiManager.class);
 
-
+        cacheManager = serviceManager.registerService(CacheManager.class);
         //
         serviceManager.startServices();
     }
