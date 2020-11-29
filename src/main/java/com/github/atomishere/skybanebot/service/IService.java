@@ -22,5 +22,5 @@ public interface IService {
     void stop();
 
     boolean isStarted();
-    default String getName() { return getClass().getName(); }
+    default String getName() { return getClass().getSimpleName(); }
 }
