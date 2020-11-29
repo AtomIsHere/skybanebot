@@ -1,0 +1,4 @@
+name: SkybaneBot
+main: com.github.atomishere.skybanebot.SkybaneBot
+version: 1.0.0
+author: AtomIsHere
