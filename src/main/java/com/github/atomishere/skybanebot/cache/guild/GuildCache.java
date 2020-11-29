@@ -35,7 +35,7 @@ public class GuildCache implements ICache<GuildMember> {
     private final List<GuildMember> members = new CopyOnWriteArrayList<>();
 
     @ConfigurationValue
-    private String guildId;
+    private String guildId = "5d9219f577ce8436b66ad36a";
 
     @Override
     public void updateCache() {
