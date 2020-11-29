@@ -35,7 +35,6 @@ public class SkybaneBot extends JavaPlugin {
     @Getter
     private MojangApiManager mojangApiManager;
 
-
     @Getter
     private CacheManager cacheManager;
 
