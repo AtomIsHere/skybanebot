@@ -1,4 +1,5 @@
 plugins {
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
     id 'java'
 }
 
@@ -19,8 +20,8 @@ repositories {
 dependencies {
     compileOnly 'com.destroystokyo.paper:paper-api:1.16.1-R0.1-SNAPSHOT'
 
-    compileOnly 'com.github.SparklingComet:java-mojang-api:-SNAPSHOT'
-    compileOnly 'net.hypixel:HypixelAPI:3.1.0'
+    implementation 'com.github.SparklingComet:java-mojang-api:-SNAPSHOT'
+    implementation 'net.hypixel:HypixelAPI:3.1.0'
 
     compileOnly 'com.discordsrv:discordsrv:1.20.0'
 
