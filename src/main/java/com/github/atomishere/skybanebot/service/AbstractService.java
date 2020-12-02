@@ -59,6 +59,11 @@ public abstract class AbstractService implements IService {
             throw new ServiceStateConflictException(getName(), ServiceStateConflictException.State.STOPPED);
         }
 
+        if(this instanceof Listener) {
+            HandlerList.unregisterAll((Listener) this);
+        }
+
+        onStop();
         try {
             plugin.getConfigHandler().saveConfigValues(this, this.getName());
         } catch (InvalidConfigurationException | IOException e) {
@@ -66,11 +71,6 @@ public abstract class AbstractService implements IService {
             return;
         }
 
-        if(this instanceof Listener) {
-            HandlerList.unregisterAll((Listener) this);
-        }
-
-        onStop();
         started = false;
     }
 
