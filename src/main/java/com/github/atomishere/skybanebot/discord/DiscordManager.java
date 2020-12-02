@@ -19,6 +19,8 @@ package com.github.atomishere.skybanebot.discord;
 
 import com.github.atomishere.skybanebot.SkybaneBot;
 import com.github.atomishere.skybanebot.cache.guild.GuildCache;
+import com.github.atomishere.skybanebot.config.ConfigurationValue;
+import com.github.atomishere.skybanebot.discord.commands.GetInactiveMembersCommand;
 import com.github.atomishere.skybanebot.discord.commands.RegisterInactivityCommand;
 import com.github.atomishere.skybanebot.service.AbstractService;
 import com.jagrosh.jdautilities.command.CommandClient;
@@ -30,15 +32,20 @@ public class DiscordManager extends AbstractService {
 
     private CommandClient client;
 
+    @ConfigurationValue
+    private int requiredXp = 25000;
+
     public DiscordManager(SkybaneBot plugin) {
         super(plugin);
     }
 
     @Override
     public void onStart() {
+        GuildCache cache = plugin.getCacheManager().getCacheFromClass(GuildCache.class);
+
         client = new CommandClientBuilder()
                 .setOwnerId(OWNER_ID)
-                .addCommands(new RegisterInactivityCommand(plugin, plugin.getCacheManager().getCacheFromClass(GuildCache.class)))
+                .addCommands(new RegisterInactivityCommand(plugin, cache), new GetInactiveMembersCommand(requiredXp, plugin, cache))
                 .build();
 
         DiscordSRV.getPlugin().getJda().addEventListener(client);
