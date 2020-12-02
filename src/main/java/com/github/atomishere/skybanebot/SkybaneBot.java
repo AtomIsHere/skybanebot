@@ -58,10 +58,9 @@ public class SkybaneBot extends JavaPlugin {
 
         serviceManager.registerService(WhitelistManager.class);
 
-        if(Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null) {
-            inactivityManager = serviceManager.registerService(InactivityManager.class);
-            serviceManager.registerService(DiscordManager.class);
-        }
+        inactivityManager = serviceManager.registerService(InactivityManager.class);
+        serviceManager.registerService(DiscordManager.class);
+
         //
         serviceManager.startServices();
     }

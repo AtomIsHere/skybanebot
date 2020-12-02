@@ -24,8 +24,6 @@ import com.github.atomishere.skybanebot.discord.commands.GetInactiveMembersComma
 import com.github.atomishere.skybanebot.discord.commands.RegisterInactivityCommand;
 import com.github.atomishere.skybanebot.service.AbstractService;
 import com.jagrosh.jdautilities.command.CommandClient;
-import com.jagrosh.jdautilities.command.CommandClientBuilder;
-import github.scarsz.discordsrv.DiscordSRV;
 
 public class DiscordManager extends AbstractService {
     private static final String OWNER_ID = "332423993132974081";
@@ -41,18 +39,10 @@ public class DiscordManager extends AbstractService {
 
     @Override
     public void onStart() {
-        GuildCache cache = plugin.getCacheManager().getCacheFromClass(GuildCache.class);
 
-        client = new CommandClientBuilder()
-                .setOwnerId(OWNER_ID)
-                .addCommands(new RegisterInactivityCommand(plugin, cache), new GetInactiveMembersCommand(requiredXp, plugin, cache))
-                .build();
-
-        DiscordSRV.getPlugin().getJda().addEventListener(client);
     }
 
     @Override
     public void onStop() {
-        DiscordSRV.getPlugin().getJda().removeEventListener(client);
     }
 }
