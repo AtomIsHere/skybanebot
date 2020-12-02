@@ -49,6 +49,8 @@ public class SkybaneBot extends JavaPlugin {
         mojangApiManager = serviceManager.registerService(MojangApiManager.class);
 
         cacheManager = serviceManager.registerService(CacheManager.class);
+
+        serviceManager.registerService(WhitelistManager.class);
         //
         serviceManager.startServices();
     }
