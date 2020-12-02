@@ -19,10 +19,13 @@ package com.github.atomishere.skybanebot.discord;
 
 import com.github.atomishere.skybanebot.SkybaneBot;
 import com.github.atomishere.skybanebot.config.ConfigurationValue;
+import com.github.atomishere.skybanebot.discord.commands.GetInactiveMembersCommand;
+import com.github.atomishere.skybanebot.discord.commands.RegisterInactivityCommand;
 import com.github.atomishere.skybanebot.service.AbstractService;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.jagrosh.jdautilities.command.CommandClient;
+import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.neovisionaries.ws.client.DualStackMode;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import lombok.Getter;
@@ -54,6 +57,11 @@ public class DiscordManager extends AbstractService {
 
     @ConfigurationValue
     private String botToken = "bot-token-here";
+    @ConfigurationValue
+    private String commandPrefix = "+";
+
+    @ConfigurationValue
+    private int requiredXp = 25000;
 
     private ExecutorService callbackThreadPool;
 
@@ -84,6 +92,11 @@ public class DiscordManager extends AbstractService {
                     .setAutoReconnect(true)
                     .setBulkDeleteSplittingEnabled(false)
                     .setToken(botToken)
+                    .addEventListeners(new CommandClientBuilder()
+                            .setPrefix(commandPrefix)
+                            .setOwnerId(OWNER_ID)
+                            .addCommands(new RegisterInactivityCommand(plugin), new GetInactiveMembersCommand(requiredXp, plugin))
+                            .build())
                     .setContextEnabled(false)
                     .build().awaitReady();
         } catch (LoginException | InterruptedException ignored) {
@@ -94,7 +107,7 @@ public class DiscordManager extends AbstractService {
     @Override
     public void onStop() {
         final ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("SkybaneBot - Shutdown").build();
-        final ExecutorService executor = Executors.newSingleThreadExecutor();
+        final ExecutorService executor = Executors.newSingleThreadExecutor(threadFactory);
         try {
             executor.invokeAll(Collections.singletonList(() -> {
                 jda.getEventManager().getRegisteredListeners().forEach(l -> jda.getEventManager().unregister(l));
