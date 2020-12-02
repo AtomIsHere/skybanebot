@@ -25,7 +25,6 @@ import com.github.atomishere.skybanebot.discord.DiscordManager;
 import com.github.atomishere.skybanebot.inactivity.InactivityManager;
 import com.github.atomishere.skybanebot.service.ServiceManager;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SkybaneBot extends JavaPlugin {
@@ -43,6 +42,8 @@ public class SkybaneBot extends JavaPlugin {
 
     @Getter
     private InactivityManager inactivityManager;
+    @Getter
+    private DiscordManager discordManager;
 
     @Override
     public void onEnable() {
@@ -59,7 +60,7 @@ public class SkybaneBot extends JavaPlugin {
         serviceManager.registerService(WhitelistManager.class);
 
         inactivityManager = serviceManager.registerService(InactivityManager.class);
-        serviceManager.registerService(DiscordManager.class);
+        discordManager = serviceManager.registerService(DiscordManager.class);
 
         //
         serviceManager.startServices();
