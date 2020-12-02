@@ -22,6 +22,7 @@ import com.github.atomishere.skybanebot.config.ConfigContainer;
 import com.github.atomishere.skybanebot.config.ConfigField;
 import com.github.atomishere.skybanebot.config.ConfigurationValue;
 import com.github.atomishere.skybanebot.service.AbstractService;
+import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.text.ParseException;
@@ -37,7 +38,8 @@ public class InactivityManager extends AbstractService {
 
     private final Set<Inactive> inactivePeople = new HashSet<>();
 
-    private SimpleDateFormat sdf;
+    @Getter
+    private SimpleDateFormat dateFormatter;
     @ConfigurationValue
     private String dateFormat = "yyyy-MM-dd";
 
@@ -50,7 +52,7 @@ public class InactivityManager extends AbstractService {
 
     @Override
     public void onStart() {
-        sdf = new SimpleDateFormat(dateFormat);
+        dateFormatter = new SimpleDateFormat(dateFormat);
         config.getConfig()
                 .getKeys(false)
                 .stream()
@@ -70,8 +72,12 @@ public class InactivityManager extends AbstractService {
         for(Inactive inactive : inactivePeople) {
             ConfigurationSection section = config.getConfig().createSection(inactive.getUsername());
             section.set("username", inactive.getUsername());
-            section.set("endData", sdf.format(inactive.getEndDate()));
+            section.set("endData", dateFormatter.format(inactive.getEndDate()));
         }
+    }
+
+    public void registerInactive(Inactive inactive) {
+        inactivePeople.add(inactive);
     }
 
     public boolean isInactive(String username) {
@@ -89,7 +95,7 @@ public class InactivityManager extends AbstractService {
 
     private Inactive createInactiveFromConfig(ConfigurationSection config) {
         try {
-            return new Inactive(config.getString("username"), sdf.parse(config.getString("endDate")));
+            return new Inactive(config.getString("username"), dateFormatter.parse(config.getString("endDate")));
         } catch (ParseException e) {
             logger.severe("Invalid date format in config: " + config.getName());
             e.printStackTrace();
