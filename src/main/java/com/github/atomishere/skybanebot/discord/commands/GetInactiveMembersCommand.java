@@ -48,7 +48,7 @@ public class GetInactiveMembersCommand extends Command {
 
         cache.getValues()
                 .stream()
-                .filter(g -> g.getWeeklyXp() >= requiredXp)
+                .filter(g -> g.getWeeklyXp() <= requiredXp)
                 .filter(g -> !plugin.getInactivityManager().isInactive(g.getUsername()))
                 .forEach(g -> messageBuilder.append("\n    ").append(g.getUsername()).append(": ").append(g.getWeeklyXp()));
 
