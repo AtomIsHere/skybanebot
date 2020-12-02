@@ -88,7 +88,7 @@ public class CacheManager extends AbstractService {
     @SuppressWarnings("unchecked")
     public <T, C extends ICache<T>> C getCacheFromClass(Class<C> cacheClass) {
         return (C) caches.stream()
-                .filter(c -> cacheClass.isInstance(cacheClass))
+                .filter(cacheClass::isInstance)
                 .findFirst()
                 .orElse(null);
     }
