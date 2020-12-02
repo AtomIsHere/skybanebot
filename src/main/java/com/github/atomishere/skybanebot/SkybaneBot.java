@@ -21,8 +21,10 @@ import com.github.atomishere.skybanebot.api.HypixelApiManager;
 import com.github.atomishere.skybanebot.api.MojangApiManager;
 import com.github.atomishere.skybanebot.cache.CacheManager;
 import com.github.atomishere.skybanebot.config.ConfigHandler;
+import com.github.atomishere.skybanebot.inactivity.InactivityManager;
 import com.github.atomishere.skybanebot.service.ServiceManager;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SkybaneBot extends JavaPlugin {
@@ -38,6 +40,9 @@ public class SkybaneBot extends JavaPlugin {
     @Getter
     private CacheManager cacheManager;
 
+    @Getter
+    private InactivityManager inactivityManager;
+
     @Override
     public void onEnable() {
         configHandler = new ConfigHandler(getDataFolder());
@@ -51,6 +56,10 @@ public class SkybaneBot extends JavaPlugin {
         cacheManager = serviceManager.registerService(CacheManager.class);
 
         serviceManager.registerService(WhitelistManager.class);
+
+        if(Bukkit.getServer().getPluginManager().getPlugin("DiscordSRV") != null) {
+            inactivityManager = serviceManager.registerService(InactivityManager.class);
+        }
         //
         serviceManager.startServices();
     }
