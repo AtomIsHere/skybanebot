@@ -11,4 +11,4 @@ This plugin uses gradle to build and is Licensed under GNU GPL v3.0. If you need
 * A plugin for your preferred IDE to add support for the lombok project
 
 ## Building
-Building this project is very simple. Make sure you have gradle installed, cd into the directory you clone this into and type `gradle jar`. You can also do this via your preferred IDE's GUI.
+Building this project is very simple. Make sure you have gradle installed, cd into the directory you clone this into and type `gradle shadowJar`. You can also do this via your preferred IDE's GUI.
