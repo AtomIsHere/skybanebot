@@ -46,6 +46,7 @@ public class RegisterInactivityCommand extends Command {
         String[] args = event.getArgs().split(" ");
         if(args.length != 2) {
             event.reply(USAGE);
+            return;
         }
 
         String username = args[0];
