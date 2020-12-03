@@ -25,6 +25,7 @@ import com.github.atomishere.skybanebot.discord.DiscordChatLinker;
 import com.github.atomishere.skybanebot.discord.DiscordManager;
 import com.github.atomishere.skybanebot.inactivity.InactivityManager;
 import com.github.atomishere.skybanebot.service.ServiceManager;
+import com.github.atomishere.skybanebot.teleport.NetherTeleportManager;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -59,6 +60,7 @@ public class SkybaneBot extends JavaPlugin {
         cacheManager = serviceManager.registerService(CacheManager.class);
 
         serviceManager.registerService(WhitelistManager.class);
+        serviceManager.registerService(NetherTeleportManager.class);
 
         inactivityManager = serviceManager.registerService(InactivityManager.class);
         discordManager = serviceManager.registerService(DiscordManager.class);
