@@ -21,6 +21,7 @@ import com.github.atomishere.skybanebot.api.HypixelApiManager;
 import com.github.atomishere.skybanebot.api.MojangApiManager;
 import com.github.atomishere.skybanebot.cache.CacheManager;
 import com.github.atomishere.skybanebot.config.ConfigHandler;
+import com.github.atomishere.skybanebot.discord.DiscordChatLinker;
 import com.github.atomishere.skybanebot.discord.DiscordManager;
 import com.github.atomishere.skybanebot.inactivity.InactivityManager;
 import com.github.atomishere.skybanebot.service.ServiceManager;
@@ -61,6 +62,7 @@ public class SkybaneBot extends JavaPlugin {
 
         inactivityManager = serviceManager.registerService(InactivityManager.class);
         discordManager = serviceManager.registerService(DiscordManager.class);
+        serviceManager.registerService(DiscordChatLinker.class);
 
         //
         serviceManager.startServices();
