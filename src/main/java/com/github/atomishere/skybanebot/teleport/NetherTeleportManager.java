@@ -22,9 +22,10 @@ import com.github.atomishere.skybanebot.service.AbstractService;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-public class NetherTeleportManager extends AbstractService {
+public class NetherTeleportManager extends AbstractService implements Listener {
     public NetherTeleportManager(SkybaneBot plugin) {
         super(plugin);
     }
