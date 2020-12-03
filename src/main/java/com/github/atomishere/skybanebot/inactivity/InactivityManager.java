@@ -72,7 +72,7 @@ public class InactivityManager extends AbstractService {
         for(Inactive inactive : inactivePeople) {
             ConfigurationSection section = config.getConfig().createSection(inactive.getUsername());
             section.set("username", inactive.getUsername());
-            section.set("endData", dateFormatter.format(inactive.getEndDate()));
+            section.set("endDate", dateFormatter.format(inactive.getEndDate()));
         }
     }
 

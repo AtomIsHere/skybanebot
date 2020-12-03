@@ -32,9 +32,9 @@ public class RegisterInactivityCommand extends Command {
     private final SkybaneBot plugin;
     private final GuildCache cache;
 
-    public RegisterInactivityCommand(SkybaneBot plugin, GuildCache cache) {
+    public RegisterInactivityCommand(SkybaneBot plugin) {
         this.plugin = plugin;
-        this.cache = cache;
+        this.cache = plugin.getCacheManager().getCacheFromClass(GuildCache.class);
 
         this.name = "registerInactivity";
         this.help = "Register for inactivity";
@@ -46,6 +46,7 @@ public class RegisterInactivityCommand extends Command {
         String[] args = event.getArgs().split(" ");
         if(args.length != 2) {
             event.reply(USAGE);
+            return;
         }
 
         String username = args[0];

@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -50,6 +51,7 @@ public class ServiceManager {
             return;
         }
 
+        Collections.reverse(services);
         services.forEach(IService::stop);
         started = false;
     }
@@ -90,7 +92,7 @@ public class ServiceManager {
     @SuppressWarnings("unchecked")
     public <S extends IService> S getServiceFromClass(Class<S> serviceClass) {
         return (S) services.stream()
-                .filter(s -> serviceClass.isInstance(serviceClass))
+                .filter(serviceClass::isInstance)
                 .findFirst()
                 .orElseThrow(() -> new ServiceNotFoundException(serviceClass));
     }

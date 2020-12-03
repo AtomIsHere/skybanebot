@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.github.atomishere'
-version '3.0-SNAPSHOT'
+version '3.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -24,7 +24,7 @@ dependencies {
     implementation 'net.hypixel:HypixelAPI:3.1.0'
 
     implementation 'com.jagrosh:jda-utilities:3.0.5'
-    compileOnly 'com.discordsrv:discordsrv:1.20.0'
+    implementation 'net.dv8tion:JDA:4.2.0_222'
 
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'

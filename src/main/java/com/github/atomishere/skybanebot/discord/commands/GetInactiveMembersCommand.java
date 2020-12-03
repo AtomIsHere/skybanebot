@@ -29,11 +29,11 @@ public class GetInactiveMembersCommand extends Command {
     private final SkybaneBot plugin;
     private final GuildCache cache;
 
-    public GetInactiveMembersCommand(int requiredXp, SkybaneBot plugin, GuildCache cache) {
+    public GetInactiveMembersCommand(int requiredXp, SkybaneBot plugin) {
         this.requiredXp = requiredXp;
 
         this.plugin = plugin;
-        this.cache = cache;
+        this.cache = plugin.getCacheManager().getCacheFromClass(GuildCache.class);
 
         this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE};
         this.name = "getInactiveMembers";
@@ -48,7 +48,7 @@ public class GetInactiveMembersCommand extends Command {
 
         cache.getValues()
                 .stream()
-                .filter(g -> g.getWeeklyXp() >= requiredXp)
+                .filter(g -> g.getWeeklyXp() <= requiredXp)
                 .filter(g -> !plugin.getInactivityManager().isInactive(g.getUsername()))
                 .forEach(g -> messageBuilder.append("\n    ").append(g.getUsername()).append(": ").append(g.getWeeklyXp()));
 
