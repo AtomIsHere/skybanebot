@@ -27,6 +27,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -68,7 +69,7 @@ public class ConfigHandler {
         Optional<Field> configFieldOpt = Arrays.stream(object.getClass().getDeclaredFields()).filter(f -> f.isAnnotationPresent(ConfigField.class)).findAny();
         Collection<Field> fields = findAllFieldsWithAnnotation(object.getClass(), ConfigurationValue.class);
 
-        if(configFieldOpt.isEmpty() && fields.size() == 0) {
+        if(!configFieldOpt.isPresent() && fields.size() == 0) {
             return;
         }
 
@@ -145,7 +146,15 @@ public class ConfigHandler {
     private Collection<Field> findAllFieldsWithAnnotation(Class<?> target, Class<? extends Annotation> annotation) {
         return Arrays.stream(target.getDeclaredFields())
                 .filter(f -> f.isAnnotationPresent(annotation))
-                .collect(Collectors.toUnmodifiableSet());
+                .collect(toImmutableList());
+    }
+
+    private static <T> Collector<T, List<T>, List<T>> toImmutableList() {
+        return Collector.of(ArrayList::new, List::add,
+                (left, right) -> {
+                    left.addAll(right);
+                    return left;
+                }, Collections::unmodifiableList);
     }
 
     private ConfigContainer getOrCreateConfig(String configName) throws IOException, InvalidConfigurationException {
