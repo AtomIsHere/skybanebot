@@ -84,7 +84,7 @@ public class InactivityManager extends AbstractService {
         Inactive inactive = inactivePeople.stream().filter(i -> i.getUsername().equals(username)).findFirst().orElse(null);
         if(inactive != null) {
             Date current = new Date(System.currentTimeMillis());
-            if(inactive.getEndDate().after(current)) {
+            if(inactive.getEndDate().before(current)) {
                 inactivePeople.remove(inactive);
                 return false;
             }
