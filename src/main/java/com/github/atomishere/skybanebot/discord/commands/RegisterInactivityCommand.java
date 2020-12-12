@@ -64,8 +64,13 @@ public class RegisterInactivityCommand extends Command {
             return;
         }
 
-        if(endDate.after(new Date(System.currentTimeMillis()))) {
+        if(endDate.before(new Date(System.currentTimeMillis()))) {
             event.reply("Invalid date, make sure the date you entered is after the current date!");
+            return;
+        }
+
+        if(plugin.getInactivityManager().isInactive(username)) {
+            event.reply("You have already registered for inactivity!");
             return;
         }
 
