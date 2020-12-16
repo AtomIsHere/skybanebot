@@ -23,6 +23,7 @@ import com.github.atomishere.skybanebot.cache.CacheManager;
 import com.github.atomishere.skybanebot.config.ConfigHandler;
 import com.github.atomishere.skybanebot.discord.DiscordChatLinker;
 import com.github.atomishere.skybanebot.discord.DiscordManager;
+import com.github.atomishere.skybanebot.error.ErrorHandler;
 import com.github.atomishere.skybanebot.inactivity.InactivityManager;
 import com.github.atomishere.skybanebot.service.ServiceManager;
 import com.github.atomishere.skybanebot.teleport.NetherTeleportManager;
@@ -31,6 +32,8 @@ import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SkybaneBot extends JavaPlugin {
+    private ErrorHandler errorHandler;
+
     @Getter
     private ConfigHandler configHandler;
     private ServiceManager serviceManager;
@@ -47,6 +50,12 @@ public class SkybaneBot extends JavaPlugin {
     private InactivityManager inactivityManager;
     @Getter
     private DiscordManager discordManager;
+
+    @Override
+    public void onLoad() {
+        errorHandler = new ErrorHandler(this);
+        errorHandler.start();
+    }
 
     @Override
     public void onEnable() {
@@ -77,5 +86,7 @@ public class SkybaneBot extends JavaPlugin {
         serviceManager.stopServices();
         configHandler.saveConfigs();
         serviceManager.clearServices();
+
+        errorHandler.stop();
     }
 }
