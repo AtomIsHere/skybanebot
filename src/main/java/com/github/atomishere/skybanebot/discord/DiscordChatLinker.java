@@ -97,7 +97,7 @@ public class DiscordChatLinker extends AbstractService implements Listener, Even
             GuildMessageReceivedEvent messageEvent = (GuildMessageReceivedEvent) event;
 
             if(!messageEvent.isWebhookMessage() && !messageEvent.getMember().getUser().isBot() && messageEvent.getChannel().equals(chatChannel)) {
-                Bukkit.getServer().broadcastMessage(ChatColor.GRAY + "[" + ChatColor.BLUE + "DISCORD" + ChatColor.GRAY + "] " + ChatColor.stripColor(messageEvent.getMember().getEffectiveName() + "> " + messageEvent.getMessage().getContentDisplay()));
+                Bukkit.getServer().broadcastMessage(ChatColor.GRAY + "[" + ChatColor.BLUE + "DISCORD" + ChatColor.GRAY + "] <" + ChatColor.stripColor(messageEvent.getMember().getEffectiveName() + "> " + messageEvent.getMessage().getContentDisplay()));
             }
         }
     }
