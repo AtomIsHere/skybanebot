@@ -30,9 +30,12 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Logger;
 
 @RequiredArgsConstructor
 public class AlliedGuildCache implements ICache<UUID> {
+    private static final Logger logger = Logger.getLogger(AlliedGuildCache.class.getName());
+
     private final Set<String> guildIds = new HashSet<>();
     private final Set<UUID> alliedMembers = ConcurrentHashMap.newKeySet();
 
@@ -46,6 +49,8 @@ public class AlliedGuildCache implements ICache<UUID> {
 
     @Override
     public void updateCache() {
+        logger.info("Updating allied guild cache");
+
         clearCache();
 
         for(String guildId : guildIds) {

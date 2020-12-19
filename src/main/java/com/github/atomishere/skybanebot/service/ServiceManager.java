@@ -27,9 +27,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 @RequiredArgsConstructor
 public class ServiceManager {
+    private static final Logger logger = Logger.getLogger(ServiceManager.class.getName());
+
     private final SkybaneBot plugin;
     private final List<IService> services = new ArrayList<>();
 
@@ -37,22 +40,28 @@ public class ServiceManager {
 
     public void startServices() {
         if(started) {
-            //TODO: Log this
+            logger.warning("Attempted to start services while they where already started!");
             return;
         }
 
-        services.forEach(IService::start);
+        services.forEach(is -> {
+            logger.info("Starting service: " + is.getName());
+            is.start();
+        });
         started = true;
     }
 
     public void stopServices() {
         if(!started) {
-            //TODO: Log this
+            logger.warning("Attempted to stop services while they where already stopped!");
             return;
         }
 
         Collections.reverse(services);
-        services.forEach(IService::stop);
+        services.forEach(is -> {
+            logger.info("Stopping service: " + is.getName());
+            is.stop();
+        });
         started = false;
     }
 

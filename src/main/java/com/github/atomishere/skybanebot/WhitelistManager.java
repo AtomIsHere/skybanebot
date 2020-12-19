@@ -27,8 +27,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class WhitelistManager extends AbstractService implements Listener {
+    private static final Logger logger = Logger.getLogger(WhitelistManager.class.getName());
+
     private GuildCache guildCache;
     private AlliedGuildCache alliedGuildCache;
 
@@ -52,6 +55,7 @@ public class WhitelistManager extends AbstractService implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         if(!canAllow(event.getPlayer().getUniqueId())) {
             event.getPlayer().kickPlayer(ChatColor.RED + "You need to be in Skybane or in an allied guild to join this server!");
+            logger.info(event.getPlayer().getName() + " tried to join the server but they aren't in the main or an allied guild!");
         }
     }
 

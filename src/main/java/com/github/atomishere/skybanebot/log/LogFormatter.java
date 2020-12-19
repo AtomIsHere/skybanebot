@@ -145,6 +145,8 @@ public class LogFormatter {
             return "Hibernate   ";
         } else if(name.contains("net.minecraft.server")) {
             return "Minecraft   ";
+        } else if(name.contains("net.dv8tion.jda")) {
+            return "Discord     ";
         }
 
         return StringUtils.rightPad(name, 13);
