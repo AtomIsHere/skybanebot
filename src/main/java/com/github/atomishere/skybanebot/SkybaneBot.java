@@ -55,7 +55,7 @@ public class SkybaneBot extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        errorHandler = new ErrorHandler(this);
+        errorHandler = new ErrorHandler();
         errorHandler.start();
     }
 
