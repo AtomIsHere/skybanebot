@@ -17,23 +17,19 @@
 
 package com.github.atomishere.skybanebot.error;
 
-import com.github.atomishere.skybanebot.SkybaneBot;
-import lombok.RequiredArgsConstructor;
+import io.sentry.Sentry;
 
 import javax.print.attribute.standard.Severity;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@RequiredArgsConstructor
 public class ErrorHandler {
     private static final Logger log = Logger.getLogger(ErrorHandler.class.getName());
 
-    private final SkybaneBot plugin;
-
     public void start() {
-        //TODO: Integrate sentry support.
-
-        log.warning("Sentry currently not implemented, will not report errors.");
+        Sentry.init(options -> {
+            options.setDsn("https://23fcda70cdef48228df7c1881a0d2a45@o493752.ingest.sentry.io/5563672");
+        });
     }
 
     public void stop() {
@@ -49,5 +45,7 @@ public class ErrorHandler {
             log.log(severity.equals(Severity.ERROR) ? Level.SEVERE : Level.WARNING,
                     "Caught exception with level " + severity.getValue());
         }
+
+        Sentry.captureException(ex);
     }
 }
