@@ -23,7 +23,9 @@ import com.github.atomishere.skybanebot.cache.CacheManager;
 import com.github.atomishere.skybanebot.config.ConfigHandler;
 import com.github.atomishere.skybanebot.discord.DiscordChatLinker;
 import com.github.atomishere.skybanebot.discord.DiscordManager;
+import com.github.atomishere.skybanebot.error.ErrorHandler;
 import com.github.atomishere.skybanebot.inactivity.InactivityManager;
+import com.github.atomishere.skybanebot.log.LoggingManager;
 import com.github.atomishere.skybanebot.service.ServiceManager;
 import com.github.atomishere.skybanebot.teleport.NetherTeleportManager;
 import com.github.atomishere.skybanebot.teleport.TeleportGui;
@@ -31,6 +33,9 @@ import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SkybaneBot extends JavaPlugin {
+    private ErrorHandler errorHandler;
+    private LoggingManager loggingManager;
+
     @Getter
     private ConfigHandler configHandler;
     private ServiceManager serviceManager;
@@ -49,7 +54,16 @@ public class SkybaneBot extends JavaPlugin {
     private DiscordManager discordManager;
 
     @Override
+    public void onLoad() {
+        errorHandler = new ErrorHandler();
+        errorHandler.start();
+    }
+
+    @Override
     public void onEnable() {
+        loggingManager = new LoggingManager(errorHandler);
+        loggingManager.start();
+
         configHandler = new ConfigHandler(getDataFolder());
         configHandler.init();
 
@@ -77,5 +91,8 @@ public class SkybaneBot extends JavaPlugin {
         serviceManager.stopServices();
         configHandler.saveConfigs();
         serviceManager.clearServices();
+
+        errorHandler.stop();
+        loggingManager.stop();
     }
 }

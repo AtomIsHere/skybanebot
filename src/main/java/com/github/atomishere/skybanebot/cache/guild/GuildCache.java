@@ -28,9 +28,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Logger;
 
 @RequiredArgsConstructor
 public class GuildCache implements ICache<GuildMember> {
+    private static final Logger logger = Logger.getLogger(GuildCache.class.getName());
+
     private final SkybaneBot plugin;
     private final List<GuildMember> members = new CopyOnWriteArrayList<>();
 
@@ -39,6 +42,8 @@ public class GuildCache implements ICache<GuildMember> {
 
     @Override
     public void updateCache() {
+        logger.info("Updating guild cache");
+
         GuildReply guild;
 
         try {
