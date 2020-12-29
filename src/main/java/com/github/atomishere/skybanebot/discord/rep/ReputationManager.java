@@ -69,6 +69,8 @@ public class ReputationManager extends AbstractService {
             reputationSection.set("uuid", entry.getKey().toString());
             reputationSection.set("reputation", entry.getValue());
         }
+
+        reputation.clear();
     }
 
     public Integer getReputation(UUID player) {
