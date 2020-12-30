@@ -103,7 +103,7 @@ public class ReputationManager extends AbstractService {
             return false;
         }
 
-        if(section.isInt("reputation")) {
+        if(!section.isInt("reputation")) {
             return false;
         }
 
