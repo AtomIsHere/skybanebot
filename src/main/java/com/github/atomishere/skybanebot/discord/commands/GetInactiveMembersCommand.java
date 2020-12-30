@@ -35,7 +35,7 @@ public class GetInactiveMembersCommand extends Command {
         this.plugin = plugin;
         this.cache = plugin.getCacheManager().getCacheFromClass(GuildCache.class);
 
-        this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE};
+        this.userPermissions = new Permission[]{Permission.MESSAGE_MANAGE};
         this.name = "getInactiveMembers";
         this.help = "Get all members who have not reached the required amount of xp";
         this.guildOnly = true;
