@@ -25,6 +25,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -53,7 +54,7 @@ public class ReputationLeaderboardCommand extends Command {
                 .entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue())
-                .sorted(Collections.reverseOrder())
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .forEach(e -> leaderboardBuilder.append(count.incrementAndGet())
                         .append(". ")
                         .append(cache.getValues()
