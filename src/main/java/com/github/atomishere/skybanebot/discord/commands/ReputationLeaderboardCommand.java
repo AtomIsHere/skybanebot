@@ -54,7 +54,7 @@ public class ReputationLeaderboardCommand extends Command {
                 .stream()
                 .sorted(Map.Entry.comparingByValue())
                 .sorted(Collections.reverseOrder())
-                .forEach(e -> leaderboardBuilder.append(count.getAndIncrement())
+                .forEach(e -> leaderboardBuilder.append(count.incrementAndGet())
                         .append(". ")
                         .append(cache.getValues()
                                 .stream()
