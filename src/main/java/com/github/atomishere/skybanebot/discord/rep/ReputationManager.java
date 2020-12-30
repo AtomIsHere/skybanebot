@@ -21,6 +21,7 @@ import com.github.atomishere.skybanebot.SkybaneBot;
 import com.github.atomishere.skybanebot.config.ConfigContainer;
 import com.github.atomishere.skybanebot.config.ConfigField;
 import com.github.atomishere.skybanebot.service.AbstractService;
+import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
@@ -33,7 +34,8 @@ import java.util.regex.Pattern;
 public class ReputationManager extends AbstractService {
     private static final Logger log = Logger.getLogger(ReputationManager.class.getName());
 
-    private final Map<UUID, Integer> reputation = new HashMap<>();
+    @Getter
+    private final Map<UUID, Integer> reputations = new HashMap<>();
 
     @ConfigField
     private ConfigContainer config;
@@ -49,7 +51,7 @@ public class ReputationManager extends AbstractService {
                 ConfigurationSection reputationSection = config.getConfig().getConfigurationSection(key);
 
                 if(verifySection(reputationSection)) {
-                    reputation.put(UUID.fromString(reputationSection.getString("uuid")), reputationSection.getInt("reputation"));
+                    reputations.put(UUID.fromString(reputationSection.getString("uuid")), reputationSection.getInt("reputation"));
                 } else {
                     log.info("Invalid reputation data: " + key);
                 }
@@ -63,35 +65,35 @@ public class ReputationManager extends AbstractService {
                 .getKeys(false)
                 .forEach(k -> config.getConfig().set(k, null));
 
-        for(Map.Entry<UUID, Integer> entry : reputation.entrySet()) {
+        for(Map.Entry<UUID, Integer> entry : reputations.entrySet()) {
             ConfigurationSection reputationSection = config.getConfig().createSection(entry.getKey().toString());
 
             reputationSection.set("uuid", entry.getKey().toString());
             reputationSection.set("reputation", entry.getValue());
         }
 
-        reputation.clear();
+        reputations.clear();
     }
 
     public Integer getReputation(UUID player) {
-        return Optional.ofNullable(reputation.get(player)).orElse(0);
+        return Optional.ofNullable(reputations.get(player)).orElse(0);
     }
 
     public void setReputation(UUID player, Integer rep) {
-        reputation.put(player, rep);
+        reputations.put(player, rep);
     }
 
     public void addReputation(UUID player, Integer rep) {
-        if(reputation.containsKey(player)) {
-            rep += reputation.get(player);
+        if(reputations.containsKey(player)) {
+            rep += reputations.get(player);
         }
 
         setReputation(player, rep);
     }
 
     public void subtractReputation(UUID player, Integer rep) {
-        if(reputation.containsKey(player)) {
-            rep = Math.max(0, reputation.get(player) - rep);
+        if(reputations.containsKey(player)) {
+            rep = Math.max(0, reputations.get(player) - rep);
         }
 
         setReputation(player, rep);
