@@ -20,6 +20,7 @@ package com.github.atomishere.skybanebot.discord;
 import com.github.atomishere.skybanebot.SkybaneBot;
 import com.github.atomishere.skybanebot.config.ConfigurationValue;
 import com.github.atomishere.skybanebot.discord.commands.GetInactiveMembersCommand;
+import com.github.atomishere.skybanebot.discord.commands.GetReputationCommand;
 import com.github.atomishere.skybanebot.discord.commands.RegisterInactivityCommand;
 import com.github.atomishere.skybanebot.discord.commands.ReputationCommand;
 import com.github.atomishere.skybanebot.service.AbstractService;
@@ -97,7 +98,7 @@ public class DiscordManager extends AbstractService {
                     .addEventListeners(new CommandClientBuilder()
                             .setPrefix(commandPrefix)
                             .setOwnerId(OWNER_ID)
-                            .addCommands(new RegisterInactivityCommand(plugin), new GetInactiveMembersCommand(requiredXp, plugin), new ReputationCommand(plugin))
+                            .addCommands(new RegisterInactivityCommand(plugin), new GetInactiveMembersCommand(requiredXp, plugin), new ReputationCommand(plugin), new GetReputationCommand(plugin))
                             .build())
                     .setContextEnabled(false)
                     .build().awaitReady();
