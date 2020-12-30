@@ -23,6 +23,7 @@ import com.github.atomishere.skybanebot.cache.CacheManager;
 import com.github.atomishere.skybanebot.config.ConfigHandler;
 import com.github.atomishere.skybanebot.discord.DiscordChatLinker;
 import com.github.atomishere.skybanebot.discord.DiscordManager;
+import com.github.atomishere.skybanebot.discord.rep.ReputationListener;
 import com.github.atomishere.skybanebot.discord.rep.ReputationManager;
 import com.github.atomishere.skybanebot.error.ErrorHandler;
 import com.github.atomishere.skybanebot.inactivity.InactivityManager;
@@ -54,6 +55,9 @@ public class SkybaneBot extends JavaPlugin {
     @Getter
     private ReputationManager reputationManager;
     @Getter
+    private ReputationListener reputationListener;
+
+    @Getter
     private DiscordManager discordManager;
 
     @Override
@@ -83,7 +87,9 @@ public class SkybaneBot extends JavaPlugin {
 
         inactivityManager = serviceManager.registerService(InactivityManager.class);
         reputationManager = serviceManager.registerService(ReputationManager.class);
+
         discordManager = serviceManager.registerService(DiscordManager.class);
+        reputationListener = serviceManager.registerService(ReputationListener.class);
         serviceManager.registerService(DiscordChatLinker.class);
 
         //
