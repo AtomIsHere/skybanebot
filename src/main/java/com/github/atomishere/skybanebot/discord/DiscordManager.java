@@ -19,8 +19,7 @@ package com.github.atomishere.skybanebot.discord;
 
 import com.github.atomishere.skybanebot.SkybaneBot;
 import com.github.atomishere.skybanebot.config.ConfigurationValue;
-import com.github.atomishere.skybanebot.discord.commands.GetInactiveMembersCommand;
-import com.github.atomishere.skybanebot.discord.commands.RegisterInactivityCommand;
+import com.github.atomishere.skybanebot.discord.commands.*;
 import com.github.atomishere.skybanebot.service.AbstractService;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -48,7 +47,8 @@ public class DiscordManager extends AbstractService {
     private static final EnumSet<GatewayIntent> intents = EnumSet.of(
             GatewayIntent.GUILD_MEMBERS,
             GatewayIntent.GUILD_EMOJIS,
-            GatewayIntent.GUILD_MESSAGES
+            GatewayIntent.GUILD_MESSAGES,
+            GatewayIntent.GUILD_MESSAGE_REACTIONS
     );
 
     @Getter
@@ -95,7 +95,7 @@ public class DiscordManager extends AbstractService {
                     .addEventListeners(new CommandClientBuilder()
                             .setPrefix(commandPrefix)
                             .setOwnerId(OWNER_ID)
-                            .addCommands(new RegisterInactivityCommand(plugin), new GetInactiveMembersCommand(requiredXp, plugin))
+                            .addCommands(new RegisterInactivityCommand(plugin), new GetInactiveMembersCommand(requiredXp, plugin), new ReputationCommand(plugin), new GetReputationCommand(plugin), new ReputationLeaderboardCommand(plugin))
                             .build())
                     .setContextEnabled(false)
                     .build().awaitReady();
