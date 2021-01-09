@@ -28,6 +28,7 @@ import net.dv8tion.jda.api.hooks.EventListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
@@ -84,9 +85,9 @@ public class DiscordChatLinker extends AbstractService implements Listener, Even
         chatChannel = null;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        if(chatChannel != null && !event.getMessage().contains("@")) {
+        if(!event.isCancelled() && chatChannel != null && !event.getMessage().contains("@")) {
             chatChannel.sendMessage(ChatColor.stripColor(event.getPlayer().getDisplayName() + " > " + event.getMessage())).submit();
         }
     }
