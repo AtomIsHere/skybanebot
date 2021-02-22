@@ -1,3 +1,6 @@
+# IMPORTANT NOTICE
+This project has been archived as it is currently being ported over to fabric. You're free to use any code here as long as you abide by the GPL, as you always will, just don't expect any support from me relating to this project. If you want to check out the continuation of this project go to this repository: https://github.com/AtomIsHere/skyfabric
+
 # Skybane Bot
 Skybane Bot is a spigot plugin written by me (Fusion) in order to handle essential functions on the Skybane server which is not handled by any other bot and to provide linking with the SMP and the Discord.
 
